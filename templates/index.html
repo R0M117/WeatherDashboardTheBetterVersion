@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Aplikasi Cuaca</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+  <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
+  <script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
+  <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+</head>
+<body>
+  <div class="container">
+    <!-- City Selection Searchable Dropdown -->
+    <div class="city-selection">
+      <label for="city-select">Pilih Kota:</label>
+      <select id="city-select" class="select2">
+        {% for city in cities %}
+          <option value="{{ city }}" {% if city == selected_city %}selected{% endif %}>{{ city }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <!-- Current Weather Section -->
+    <div id="current-weather" class="current-weather">
+      <div class="current-temp">
+        <span class="temp">{{ current_weather.high_temp }}°C</span>
+        <span class="temp-range">{{ current_weather.high_temp }}° / {{ current_weather.low_temp }}°</span>
+      </div>
+      <img src="{{ url_for('static', filename='images/' + current_weather.icon) }}" alt="{{ current_weather.condition }}" class="current-icon">
+      <div class="current-conditions">
+        <span class="condition">{{ current_weather.condition }}</span>
+        <span>Kelembapan Max: <span class="humidity-max">{{ current_weather.humidity_max }}%</span></span>
+        <span>Kelembapan Min: <span class="humidity-min">{{ current_weather.humidity_min }}%</span></span>
+        <!-- Current Date Highlight -->
+        <span class="current-date">Hari Ini: {{ current_weather.date }}</span>
+      </div>
+    </div>
+
+    <!-- Forecast Section -->
+    <div id="forecast-section" class="forecast-section">
+      {% for item in data %}
+        <div class="forecast-item 
+                    {% if item.date == selected_date %}selected{% endif %} 
+                    {% if item.high_temp == "N/A" or item.low_temp == "N/A" %}na{% endif %}" 
+             data-high-temp="{{ item.high_temp }}" 
+             data-low-temp="{{ item.low_temp }}" 
+             data-condition="{{ item.condition }}" 
+             data-humidity-max="{{ item.humidity_max }}" 
+             data-humidity-min="{{ item.humidity_min }}"
+             data-icon="{{ item.icon }}">
+          <div class="forecast-date">
+            <div class="weekday">{{ item.weekday }}</div>
+            <div class="date">{{ item.date }}</div>
+          </div>
+          <img src="{{ url_for('static', filename='images/' + item.icon) }}" alt="{{ item.condition }}" class="forecast-icon">
+          <div class="forecast-temps">
+            <span class="high">{{ item.high_temp }}°C</span>
+            <span class="low">{{ item.low_temp }}°C</span>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+
+    <!-- Temperature Trend Chart -->
+    <div class="chart-title">Temperature Trend</div>
+    <div id="chartContainer" class="chart-container loading"></div>
+  </div>
+
+  <!-- Pass STATIC_URL to JavaScript -->
+  <script>
+    const STATIC_URL = "{{ url_for('static', filename='') }}";
+  </script>
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!-- Select2 JS -->
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+  <!-- Link to the JavaScript file -->
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
