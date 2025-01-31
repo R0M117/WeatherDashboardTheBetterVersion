@@ -15,4 +15,4 @@
 
 3. Run Flask App
    
-flask run or python app.py 
+- flask run or python app.py 
