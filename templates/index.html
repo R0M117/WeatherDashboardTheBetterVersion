@@ -9,6 +9,20 @@
   <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
   <script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
   <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+  <style>
+    /* Additional styles for the new icon group */
+    .current-icon-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    /* Optionally adjust spacing between icon and condition */
+    .current-icon-group .condition {
+      margin-top: 0.5rem;
+      font-size: 1.2rem;
+      text-align: center;
+    }
+  </style>
 </head>
 <body>
   <div class="container">
@@ -28,13 +42,20 @@
         <span class="temp">{{ current_weather.high_temp }}°C</span>
         <span class="temp-range">{{ current_weather.high_temp }}° / {{ current_weather.low_temp }}°</span>
       </div>
-      <img src="{{ url_for('static', filename='images/' + current_weather.icon) }}" alt="{{ current_weather.condition }}" class="current-icon">
-      <div class="current-conditions">
+      <!-- New wrapper for icon and condition -->
+      <div class="current-icon-group">
+        <img src="{{ url_for('static', filename='images/' + current_weather.icon) }}" alt="{{ current_weather.condition }}" class="current-icon">
         <span class="condition">{{ current_weather.condition }}</span>
+      </div>
+      <div class="current-conditions">
         <span>Kelembapan Max: <span class="humidity-max">{{ current_weather.humidity_max }}%</span></span>
         <span>Kelembapan Min: <span class="humidity-min">{{ current_weather.humidity_min }}%</span></span>
-        <!-- Current Date Highlight -->
+        <!-- Current Date Highlight with Date Picker -->
         <span class="current-date">Hari Ini: {{ current_weather.date }}</span>
+        <div class="date-picker-container">
+          <!-- The value attribute is set to the ISO date from the current weather forecast -->
+          <input type="date" id="date-picker" value="{{ current_weather.date_iso }}">
+        </div>
       </div>
     </div>
 
@@ -49,7 +70,8 @@
              data-condition="{{ item.condition }}" 
              data-humidity-max="{{ item.humidity_max }}" 
              data-humidity-min="{{ item.humidity_min }}"
-             data-icon="{{ item.icon }}">
+             data-icon="{{ item.icon }}"
+             data-date-iso="{{ item.date_iso }}">
           <div class="forecast-date">
             <div class="weekday">{{ item.weekday }}</div>
             <div class="date">{{ item.date }}</div>
