@@ -16,10 +16,10 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # DB Config
-DB_HOST = os.getenv('DB_HOST', 'srv610.hstgr.io')
-DB_USERNAME = os.getenv('DB_USERNAME', 'u385006994_freelance')
-DB_PASSWORD = os.getenv('DB_PASSWORD', 'FredbAc3s5')
-DB_NAME = os.getenv('DB_NAME', 'u385006994_databoks')
+DB_HOST = os.getenv('DB_HOST', 'your-db-host')
+DB_USERNAME = os.getenv('DB_USERNAME', 'your-db-username')
+DB_PASSWORD = os.getenv('DB_PASSWORD', 'your-db-password')
+DB_NAME = os.getenv('DB_NAME', 'your-db-name')
 
 app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -28,7 +28,7 @@ db = SQLAlchemy(app)
 
 # Model Cuaca 
 class Cuaca(db.Model):
-    __tablename__ = 'cuaca_kabkota_new'
+    __tablename__ = 'your-table'
     id = db.Column(db.Integer, primary_key=True)
     kab = db.Column(db.String(100))
     provinsi = db.Column(db.String(100))
